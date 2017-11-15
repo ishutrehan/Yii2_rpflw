@@ -39,7 +39,7 @@ return [
         ],
         'urlManagerBackend' => [
             'class' => 'yii\web\urlManager',
-            'baseUrl' =>  'http://localhost/repflow/frontend/web/index.php',
+            'baseUrl' =>  'http://localhost/Yii2_rpflw/frontend/web/index.php',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
         ],
