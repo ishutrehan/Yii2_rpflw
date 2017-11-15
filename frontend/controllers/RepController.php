@@ -200,8 +200,19 @@ class RepController extends Controller
 
 
     public function actionTeam(){
+        
+        $created_at = date('m/d/Y');
+        
+        $daily = Sales::find()
+                ->where(['status' => 'completed','finalize_date' => $created_at])
+                ->count();
 
-        return $this->render('team');
+        // echo"<pre>";        
+        // print_r($daily);
+        // die;
+         return $this->render('team',[
+            'daily' => $daily,
+            ]);
     } 
 
 }
