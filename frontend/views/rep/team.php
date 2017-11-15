@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\RepForm */
 
@@ -38,7 +39,8 @@ $this->title = 'Team';
                                         <h4> <span class="label label-danger pull-right">Daily Income</span></h4>
                                     </div>
                                     <div class="panel-body">
-                                        <h1>$1,3012</h1>
+
+                                        <h1><?php echo $daily ?></h1>
                                         <!-- <div class="text-danger pull-right">53% <i class="fa fa-bolt"></i></div> -->
                                         <small>Daily income</small>
                                     </div>
