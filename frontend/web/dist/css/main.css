@@ -4321,3 +4321,14 @@ landing page
 .sales-form{ width: 100%; display: inline-block; background: #fff;border-radius: 5px;
     padding: 20px;
     box-shadow: 0 2px 3px #b1b1b1; }
+
+    .fileimg{ margin-top: 15px; }
+
+.fileimg input[type="file"]{ display: none; }
+.fileimg label span {
+    background: #449d44;
+    color: #fff;
+    border-radius: 30px;
+    padding: 8px 24px;
+    cursor: pointer;
+}

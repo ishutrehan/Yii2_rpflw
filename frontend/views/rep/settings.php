@@ -25,7 +25,7 @@ $this->title = 'Settings';
                     <?php endif; ?>
             <?php $form = ActiveForm::begin(['method' => 'post', 
                 'options' => [
-                    'class' => 'form-horizontal'
+                    'class' => 'form-horizontal','enctype' => 'multipart/form-data'
                 ],'action' => Url::to(['rep/updateuser'])]); ?>
                 <div class="form-group">
                     <label for="inputEmail1" class="col-lg-3 col-sm-3 control-label">First Name</label>
@@ -69,7 +69,15 @@ $this->title = 'Settings';
                     <div class="col-lg-9">
                         <input class="form-control" value="<?= $user->email; ?>" id="inputEmail1" placeholder="Email" name="email" type="email">
                     </div>
-                </div>    -->                                               
+                </div>    -->
+                 <div class="form-group">
+                   <div class="col-lg-3 col-sm-3 control-label"></div>
+                    <div class="col-lg-9 fileimg">
+                        <label for="image"><span>Upload file</span> Upload file</label>
+                        <input class="form-control" id="image" name="file" type="file">
+                    </div>
+                </div> 
+
                 <div class="form-group">
                     <div class="col-lg-offset-3 col-lg-9">
                         <div class="checkbox">

@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\User;
-
+use yii\web\UploadedFile;
 /**
  * RepController implements the CRUD actions for Sales model.
  */
@@ -156,10 +156,26 @@ class RepController extends Controller
    public function actionUpdateuser(){
 
     $user = User::findOne(Yii::$app->user->id);
-
     $pass = $user['password_hash'];
     
     if(isset($_POST) && !empty($_POST)){
+
+            $file_name = '';
+          if(isset($_FILES['file']) && !empty($_FILES['file']['name'])){
+
+              $errors= array();
+              $file_name = $_FILES['file']['name'];
+              $file_tmp =$_FILES['file']['tmp_name'];
+              $file_type=$_FILES['file']['type'];
+             
+              $tmp = explode('.', $file_name);
+              $file_extension = end($tmp);
+
+              
+              move_uploaded_file($file_tmp,"uploads/".$file_name);
+           }
+
+
 
         $password = $_POST['password'];
 
@@ -182,6 +198,7 @@ class RepController extends Controller
 
         $user->password_hash = $pass;
         $user->notification = $check;
+        $user->image = $file_name;
         $user->save();
         if($msg){
             Yii::$app->session->setFlash('error', 'Incorrect password.');
@@ -202,16 +219,53 @@ class RepController extends Controller
     public function actionTeam(){
         
         $created_at = date('m/d/Y');
+
+        $monday = strtotime('last monday', strtotime('tomorrow'));
+        $sunday = strtotime('+6 days', $monday);
+
+        $currntweek = date('m/d/Y', $monday); 
+        $endweek = date('m/d/Y', $sunday);
         
+        $first_date = date('m/d/Y',strtotime('first day of this month'));
+        $last_date = date('m/d/Y',strtotime('last day of this month'));
+
+      $start_date = date("m/d/Y",strtotime('first day of January'));
+      $end_date = date("m/d/Y",strtotime('last day of December'));
+
         $daily = Sales::find()
                 ->where(['status' => 'completed','finalize_date' => $created_at])
                 ->count();
 
-        // echo"<pre>";        
-        // print_r($daily);
-        // die;
+        $week = Sales::find()
+                ->select('commission_amt')
+                ->where(['between','finalize_date', $currntweek,$endweek])
+                ->andwhere(['status' => 'completed'])
+                ->count();        
+
+        $month = Sales::find()
+                ->select('commission_amt')
+                ->where(['between','finalize_date', $first_date,$last_date])
+                ->andwhere(['status' => 'completed'])
+                ->count();   
+
+          $year = Sales::find()
+                ->select('commission_amt')
+                ->where(['between','finalize_date', $start_date,$end_date])
+                ->andwhere(['status' => 'completed'])
+                ->count(); 
+
+        $sales = Sales::find()
+                ->select('*')
+                ->where(['between','finalize_date', $currntweek,$endweek])
+                ->andwhere(['status' => 'completed'])
+                ->count();                  
+
          return $this->render('team',[
             'daily' => $daily,
+            'week' => $week,
+            'month' => $month,
+            'year' => $year,
+            'sales' => $sales,
             ]);
     } 
 
