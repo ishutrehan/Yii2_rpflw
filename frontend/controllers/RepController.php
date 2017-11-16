@@ -67,7 +67,7 @@ class RepController extends Controller
     public function actionCreate()
     {
         $model = new Sales();
-        $model->payment_status = 'unpaid';
+        $model->payment_status = 'Unpaid';
         $model->invoice = '';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index', 'id' => $model->id]);
