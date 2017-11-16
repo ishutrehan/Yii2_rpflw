@@ -4346,3 +4346,25 @@ landing page
       }
 table.dataTable thead th, table.dataTable thead td{ font-size: 12px; }
 .alert-warning{ width: 100%; float: left; }
+
+
+.margrita_bx{ width: 100%; display: inline-block; background: #fff;border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 3px #b1b1b1;
+    margin-bottom: 30px; }
+    .margrita_bx h3{ margin: 0 0 15px 0; text-transform:capitalize; }
+.margrita_bx, .dv_rw{ width: 100%; display: inline-block; }
+.dv_rw{ margin-bottom: 10px; }
+.img_team{ float: left; margin:0; 
+border-radius: 5px; 
+width: 120px;
+border-bottom-left-radius: 0;
+border-bottom-right-radius: 0;}
+.img_team img{ border-radius: 5px; 
+border-bottom-left-radius: 0;
+border-bottom-right-radius: 0; }
+
+.cont_team{  margin:0 0 0 120px; }
+.cont_team h4{ margin: 0; }
+
+.ourteam_section{ padding: 0 115px; width: 100%; display: inline-block; }
