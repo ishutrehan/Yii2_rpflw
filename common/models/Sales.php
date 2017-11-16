@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use Yii;
 
@@ -37,7 +37,7 @@ class Sales extends \yii\db\ActiveRecord
             [['order_date', 'firstname', 'lastname', 'jobnumber', 'products_sold', 'commission_amt', 'status', 'finalize_date', 'note'], 'required'],
             [['note'], 'string'],
             [['order_date', 'firstname', 'lastname', 'products_sold', 'status', 'finalize_date'], 'string', 'max' => 255],
-            [['jobnumber', 'commission_amt'], 'integer'],
+            [['jobnumber', 'commission_amt','revenue'], 'integer'],
         ];
     }
 

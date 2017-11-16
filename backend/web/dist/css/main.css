@@ -3170,8 +3170,12 @@ a.DTTT_button:hover:not(.DTTT_disabled),
   background: #ddd !important; }
 
 .tbl-head {
-  float: right;
-  margin-left: 10px; }
+    float: right;
+    margin-left: 10px;
+    margin-top: 5px;
+    position: relative;
+    z-index: 1;
+}
 
 .dataTables_wrapper .dataTables_info {
   padding-top: 2.5em !important; }
@@ -4321,3 +4325,24 @@ landing page
 .sales-form{ width: 100%; display: inline-block; background: #fff;border-radius: 5px;
     padding: 20px;
     box-shadow: 0 2px 3px #b1b1b1; }
+
+    .tbl-top{ position: relative; }
+
+.dataTables_filter{     float: right;
+    position: absolute;
+    right: 45px;
+    top: 0;
+}
+.sales-index h3{ float: left; margin-top: 0; }
+.right_breadcrum{ float: right; }
+
+.DTTT_button.DTTT_button_print {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    background: #f3f3f3 !important;
+    padding: 4px 4px;
+    border: 1px solid;
+        border-radius: 3px;
+      }
+table.dataTable thead th, table.dataTable thead td{ font-size: 12px; }
+.alert-warning{ width: 100%; float: left; }

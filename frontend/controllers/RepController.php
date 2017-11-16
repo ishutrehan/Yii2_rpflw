@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\Sales;
-use app\models\SalesSearch;
+use common\models\Sales;
+use common\models\SalesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -69,7 +69,7 @@ class RepController extends Controller
     public function actionCreate()
     {
         $model = new Sales();
-        $model->payment_status = 'unpaid';
+        $model->payment_status = 'Unpaid';
         $model->user_id = Yii::$app->user->identity->id;
         $model->invoice = '';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
