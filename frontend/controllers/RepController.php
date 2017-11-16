@@ -39,9 +39,11 @@ class RepController extends Controller
         // $searchModel = new SalesSearch();
         // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+       
         $model = Sales::find()
                 ->select('*')
-                ->all();
+                ->where(['user_id' => Yii::$app->user->identity->id])
+                ->all();  
         return $this->render('index', [
               'model' => $model,  
         ]);
@@ -68,6 +70,7 @@ class RepController extends Controller
     {
         $model = new Sales();
         $model->payment_status = 'unpaid';
+        $model->user_id = Yii::$app->user->identity->id;
         $model->invoice = '';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index', 'id' => $model->id]);
@@ -268,5 +271,13 @@ class RepController extends Controller
             'sales' => $sales,
             ]);
     } 
+
+
+    public function actionSearch(){
+
+        $sql = "SELECT * FROM sales WHERE status LIKE '%".$_GET['searchbar']."%' OR jobnumber LIKE '%".$_GET['searchbar']."%'";
+
+          
+    }
 
 }
