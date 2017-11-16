@@ -23,7 +23,7 @@ class RepController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['GET'],
                 ],
             ],
         ];
@@ -128,6 +128,21 @@ class RepController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+
+    /**
+     * Deletes an existing Sales model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+
+    public function actionDelete($id)
+    {
+        User::findOne($id)->delete();
+        Yii::$app->session->setFlash('Success',"User has been deleted.");
+        return $this->redirect(['team']);
     }
 
 
