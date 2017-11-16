@@ -10,6 +10,7 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
+use common\models\User;
 
 AppAsset::register($this);
 ?>
@@ -56,16 +57,45 @@ AppAsset::register($this);
 
 
                                 <!--search start-->
-                                <form class="search-content hidden-xs" >
-                                    <button type="submit" name="search" class="btn srch-btn">
+                                <form class="search-content hidden-xs" id="ent_srch" action="<?= Url::to(['rep/search']);?>" method="get" >
+
+                                    <input type="hidden" name="r" value="rep/search">
+                                    <button type="submit" class="btn srch-btn">
                                         <i class="fa fa-search"></i>
                                     </button>
-                                    <input type="text" class="form-control" name="keyword" placeholder="Search here...">
+                                    <input type="text" id="srch" class="form-control" name="searchbar" placeholder="Search here...">
                                 </form>
+
                                 <!--search end-->
 
                                 <!--notification start-->
-                               
+                                <?php
+                                 $image = Yii::$app->user->identity->image;
+                                $user = Yii::$app->user->identity->username;
+                                ?>
+                               <ul class="nav navbar-nav navbar-right">
+
+                        <li class="dropdown dropdown-usermenu">
+                            <a href="#" class=" dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <div class="user-avatar"><img src="uploads/<?= $image ?>" alt="..."></div>
+                                <span class="hidden-sm hidden-xs"><?php echo $user ?></span>
+                                <!--<i class="fa fa-angle-down"></i>-->
+                                <!-- <span class="caret hidden-sm hidden-xs"></span> -->
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                                <li><a href="#"><i class="fa fa-cogs"></i>  Settings</a></li>
+                                <li><a href="#"><i class="fa fa-user"></i>  Profile</a></li>
+                                <li><a href="#"><i class="fa fa-commenting-o"></i>  Feedback</a></li>
+                                <li><a href="#"><i class="fa fa-life-ring"></i>  Help</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#"><i class="fa fa-sign-out"></i> Log Out</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- <li>
+                            <a data-toggle="ui-aside-right" href=""><i class="glyphicon glyphicon-option-vertical"></i></a>
+                        </li> -->
+                    </ul>
                                 <!--notification end-->
 
                             </div>
