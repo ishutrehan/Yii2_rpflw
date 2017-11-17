@@ -163,10 +163,11 @@ class RepController extends Controller
 
     $user = User::findOne(Yii::$app->user->id);
     $pass = $user['password_hash'];
+    $oldimage = $user['image'];
     
     if(isset($_POST) && !empty($_POST)){
 
-            $file_name = '';
+          $file_name = $oldimage;
           if(isset($_FILES['file']) && !empty($_FILES['file']['name'])){
 
               $errors= array();
@@ -189,9 +190,11 @@ class RepController extends Controller
         $user->last_name = $_POST['last_name'];
         $user->address = $_POST['address'];
         $user->city = $_POST['city'];
+        $user->state = $_POST['state'];
+        $user->zip_code = $_POST['zip'];
         $msg = 0;
 
-        if(isset($_POST['password']) && !empty($_POST['password']) && !empty($_POST['newpassword'])){
+        if(isset($_POST['password']) && !empty($_POST['password']) && !empty($_POST['newpassword']) && ($_POST['newpassword']) == ($_POST['confirmpassword'])) {
 
             if(Yii::$app->security->validatePassword($password, $pass)){
                 $pass = Yii::$app->security->generatePasswordHash($_POST['newpassword']);

@@ -1,3 +1,6 @@
+
+
+
 <?php
 
 use yii\helpers\Html;
@@ -51,17 +54,46 @@ $this->title = 'Settings';
                         <input class="form-control" value="<?= $user->city; ?>" id="city" placeholder="City" name="city" type="text" required>
                     </div>
                 </div>
+                 <div class="form-group">
+                    <label for="inputstate" class="col-lg-3 col-sm-3 control-label">State</label>
+                    <div class="col-lg-9"> 
+                       <select class="form-control" name="state" value="<?= $user->state; ?>">
+                       <option value="<?= $user->state;?>"><?= $user->state; ?></option>
+                       
+                         <?php
+                       $arr = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','District of Columbia','Puerto Rico','Guam','American Samoa','U.S. Virgin Islands','Northern Mariana Islands'];
+                    
+                        $length = count($arr);
+                        for($i=0;$i<$length;$i++){
+                        echo "<option value=".$arr[$i].">".$arr[$i]."</option>";  
+                        }
+                     ?>
+                    </select>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label for="inputZipCode" class="col-lg-3 col-sm-3 control-label">Zip Code</label>
+                    <div class="col-lg-9"> 
+                        <input class="form-control" value="<?= $user->zip_code; ?>" id="ZipCode" placeholder="Zip Code" name="zip" type="text" required>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="inputPassword1" class="col-lg-3 col-sm-3 control-label">Password</label>
                     <div class="col-lg-9">
                         <input class="form-control" id="inputPassword1" placeholder="Password" name="password" type="password">
-                        <span class="notdv">Note: If you do not enter password and new password then your other information will be update or you enter your current password and new password then your password will be update.</span>
+                        <span class="notdv">Note: If you do not enter password and new password then your other information will be update or you enter your existing password and new password then your password will be update.</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword1" class="col-lg-3 col-sm-3 control-label">New Password</label>
                     <div class="col-lg-9">
                         <input class="form-control" id="inputPassword1" placeholder="New Password" name="newpassword" type="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCPassword1" class="col-lg-3 col-sm-3 control-label">Confirm Password</label>
+                    <div class="col-lg-9">
+                        <input class="form-control" id="inputCPassword1" placeholder="Confirm Password" name="confirmpassword" type="password">
                     </div>
                 </div>
                 <!-- <div class="form-group">
@@ -71,9 +103,10 @@ $this->title = 'Settings';
                     </div>
                 </div>    -->
                  <div class="form-group">
-                   <div class="col-lg-3 col-sm-3 control-label"></div>
+                  <label for="inputPassword1" class="col-lg-3 col-sm-3 control-label">Profile Image</label>
+
                     <div class="col-lg-9 fileimg">
-                        <label for="image"><span>Upload file</span> Upload file</label>
+                        <label for="image"><span>Upload file</span></label>
                         <input class="form-control" id="image" name="file" type="file">
                     </div>
                 </div> 
@@ -82,7 +115,7 @@ $this->title = 'Settings';
                     <div class="col-lg-offset-3 col-lg-9">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" name="check" value="yes"> Recieve Email Notifications
+                                <input type="checkbox" name="check" value="yes" checked> Recieve Email Notifications
                             </label>
                         </div>
                     </div>

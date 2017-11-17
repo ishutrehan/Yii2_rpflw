@@ -63,7 +63,7 @@ AppAsset::register($this);
                                     <button type="submit" class="btn srch-btn">
                                         <i class="fa fa-search"></i>
                                     </button>
-                                    <input type="text" id="srch" class="form-control" name="searchbar" placeholder="Search here...">
+                                    <input type="text" id="srch" class="form-control" name="searchbar" placeholder="Search here..." value="<?php if(isset($_GET['searchbar'])){ echo $_GET['searchbar'];}?>">
                                 </form>
 
                                 <!--search end-->
@@ -71,16 +71,18 @@ AppAsset::register($this);
                                 <!--notification start-->
                                 <?php
                                  $image = Yii::$app->user->identity->image;
-                                $user = Yii::$app->user->identity->username;
+                                $first = Yii::$app->user->identity->first_name;
+
+                                $last = Yii::$app->user->identity->last_name;
                                 ?>
                                <ul class="nav navbar-nav navbar-right">
 
                         <li class="dropdown dropdown-usermenu">
                             <a href="#" class=" dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <div class="user-avatar"><img src="uploads/<?= $image ?>" alt="..."></div>
-                                <span class="hidden-sm hidden-xs"><?php echo $user ?></span>
-                                <!--<i class="fa fa-angle-down"></i>-->
-                                <!-- <span class="caret hidden-sm hidden-xs"></span> -->
+                                <span class="hidden-sm hidden-xs"><?php echo $first." ".$last ?></span>
+                                <!-- <i class="fa fa-angle-down"></i> -->
+                              <span class="caret hidden-sm hidden-xs"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
                                 <li><a href="#"><i class="fa fa-cogs"></i>  Settings</a></li>
@@ -88,13 +90,14 @@ AppAsset::register($this);
                                 <li><a href="#"><i class="fa fa-commenting-o"></i>  Feedback</a></li>
                                 <li><a href="#"><i class="fa fa-life-ring"></i>  Help</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#"><i class="fa fa-sign-out"></i> Log Out</a></li>
+                                <li><a href="<?= Url::to(['site/logout'])?>" data-method="post""><i class="fa fa-sign-out"></i> Log Out</a></li>
                             </ul>
+                      
                         </li>
+                 
+                  
 
-                        <!-- <li>
-                            <a data-toggle="ui-aside-right" href=""><i class="glyphicon glyphicon-option-vertical"></i></a>
-                        </li> -->
+
                     </ul>
                                 <!--notification end-->
 
