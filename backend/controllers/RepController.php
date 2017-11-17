@@ -37,6 +37,9 @@ class RepController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         die("INDEX");
     }
     
@@ -46,6 +49,9 @@ class RepController extends Controller
      */
     public function actionSales()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = Sales::find()
                   ->all();
         return $this->render('sales', [
@@ -59,6 +65,9 @@ class RepController extends Controller
      */
     public function actionFinancials()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         return $this->render('financials');
     }
 
@@ -68,6 +77,9 @@ class RepController extends Controller
      */
     public function actionTeam()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = User::find()
                   ->where(["role"=> 2 ])
                   ->all();
@@ -85,10 +97,14 @@ class RepController extends Controller
      */
     public function actionSettings()
     {
-        $user = new User();
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $user = User::findOne(Yii::$app->user->id);
         return $this->render('settings', [
             'user' => $user
-        ]);
+        ]); 
+       
     }
 
 
@@ -100,6 +116,7 @@ class RepController extends Controller
      */
     public function actionUpdate($id)
     {
+
         $model = $this->findModel($id);
 
         if(Yii::$app->request->post('update')) {
@@ -155,6 +172,9 @@ class RepController extends Controller
 
     public function actionInvoice($id) 
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = $this->findModel($id);
 
         $old_date = date($model->order_date);
@@ -215,6 +235,66 @@ class RepController extends Controller
             return $errors;
         }
 
+    }
+
+
+    public function actionUpdateuser()
+    {
+        $user = User::findOne(Yii::$app->user->id);
+        $msg = 0;
+        if(isset($_POST['save']))
+        {   
+            $file_name = $user->image;
+            $pass = $user->password_hash;
+            $user->attributes = $_POST;
+    
+            if(isset($_FILES['file']) && !empty($_FILES['file']['name']))
+            {
+                $errors= array();
+                $file_name = date('U').'_'.$_FILES['file']['name'];
+                $file_tmp = $_FILES['file']['tmp_name'];
+                $file_type = $_FILES['file']['type'];                 
+                $tmp = explode('.', $file_name);
+                $file_extension = end($tmp);                  
+                move_uploaded_file($file_tmp,"uploads/".$file_name);
+            }
+
+            if(!empty($_POST['password']) && !empty($_POST['newpassword']) ) {
+
+                if($_POST['newpassword'] == $_POST['confirmpassword'])
+                {
+                    if(Yii::$app->security->validatePassword($_POST['password'], $pass))
+                    {
+                        $pass = Yii::$app->security->generatePasswordHash($_POST['newpassword']);
+                    }
+                    else
+                    {
+                        $msg = 1;
+                    }
+                } else {
+                    $msg = 2;
+                }
+
+            }
+         
+            $user->password_hash = $pass;
+            $user->image = $file_name;
+            $check = (isset($_POST['check']) && !empty($_POST['check'])) ? $_POST['check'] : 'no';
+            $user->notification = $check;
+            if($msg == 1) {
+                Yii::$app->session->setFlash('error', 'Incorrect password.');
+            }
+            elseif ($msg == 2) {
+                Yii::$app->session->setFlash('error', 'Password and Confirm password not match.');
+            }
+            else{
+                Yii::$app->session->setFlash('Success',"Your information has been updated");
+            }
+
+            $user->save();
+            return $this->redirect(['/rep/settings']);
+
+        }
     }
 
 }
