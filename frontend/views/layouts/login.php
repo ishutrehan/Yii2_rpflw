@@ -29,7 +29,7 @@ AppAsset::register($this);
 <div class="wrap">
      <div class="header">
           <div class="logo">
-              <a href="#">Repflow</a>
+              <a href="<?= Yii::$app->homeUrl;?>"><img src="images/LoginLogo.png"/></a>
           </div>
      </div>     
     <div class="container">

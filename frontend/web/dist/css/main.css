@@ -1359,7 +1359,8 @@ Horizontal Nav
     margin-right: 0;
     z-index: 100;
     float: left;
-    background: #ffffff;
+    /*background: #ffffff;*/
+     background: #222;
     position: absolute;
     border: none;
     -webkit-border-radius: 0;
@@ -1370,7 +1371,8 @@ Horizontal Nav
     .hori-nav .navbar-toggle .icon-bar {
       background: #626262; }
     .hori-nav .navbar-toggle:hover {
-      background: rgba(44, 44, 44, 0.1); }
+    /*  background: rgba(44, 44, 44, 0.1);*/ 
+      background: #222;}
 
   .hori-nav .container {
     background: #ffffff; }
@@ -4331,4 +4333,12 @@ landing page
     border-radius: 30px;
     padding: 8px 24px;
     cursor: pointer;
+}
+
+
+@media (max-width: 767px) {
+.sales-create .login_area {
+    width: 100%;
+}
+
 }

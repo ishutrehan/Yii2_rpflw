@@ -38,7 +38,7 @@ AppAsset::register($this);
                                 <!--logo start-->
                                 <a href="" class="navbar-brand">
                                     <span class="logo"><!-- <img src="imgs/logo-dark.png" alt=""/> -->
-                                        Repflow
+                                      <a href="<?=Url::toRoute('/rep/index') ?>"><img src="images/LogoHeader.png"/></a>
                                     </span>
                                 </a>
                                 <!--logo end-->
@@ -85,11 +85,11 @@ AppAsset::register($this);
                               <span class="caret hidden-sm hidden-xs"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li><a href="#"><i class="fa fa-cogs"></i>  Settings</a></li>
+                                <!-- <li><a href="#"><i class="fa fa-cogs"></i>  Settings</a></li>
                                 <li><a href="#"><i class="fa fa-user"></i>  Profile</a></li>
                                 <li><a href="#"><i class="fa fa-commenting-o"></i>  Feedback</a></li>
                                 <li><a href="#"><i class="fa fa-life-ring"></i>  Help</a></li>
-                                <li class="divider"></li>
+                                <li class="divider"></li> -->
                                 <li><a href="<?= Url::to(['site/logout'])?>" data-method="post""><i class="fa fa-sign-out"></i> Log Out</a></li>
                             </ul>
                       
