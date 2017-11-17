@@ -32,7 +32,7 @@ class AppAsset extends AssetBundle
         'bower_components/datatables-responsive/js/dataTables.responsive.js',
         'bower_components/datatables-scroller/js/dataTables.scroller.js',
         'dist/js/init-datatables.js',
-        'dist/js/main.js',
+       // 'dist/js/main.js',
         'bower_components/jquery/dist/jquery.min.js',
         'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
         'dist/js/init-datepicker.js',
