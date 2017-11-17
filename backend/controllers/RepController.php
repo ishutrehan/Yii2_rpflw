@@ -6,8 +6,10 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 use common\models\User;
 use common\models\Sales;
+use frontend\models\SignupForm;
 
 /**
  * RepController implements the CRUD actions for Sales model.
@@ -70,8 +72,10 @@ class RepController extends Controller
                   ->where(["role"=> 2 ])
                   ->all();
 
+        $user = new User();          
         return $this->render('team', [
-          'model' => $model
+          'model' => $model,
+          'user' => $user
         ]);
     }
 
@@ -81,7 +85,10 @@ class RepController extends Controller
      */
     public function actionSettings()
     {
-        return $this->render('settings');
+        $user = new User();
+        return $this->render('settings', [
+            'user' => $user
+        ]);
     }
 
 
@@ -161,5 +168,53 @@ class RepController extends Controller
    
     }
 
+    public function actionSignup() 
+    {
+
+        $model = new SignupForm();
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $password = rand(100000, 10000000);
+        $password_gen = Yii::$app->security->generatePasswordHash($password);
+        $model->username = Yii::$app->request->post('User')['email'];
+        $model->email = Yii::$app->request->post('User')['email'];
+        $model->password = $password_gen;
+        if ($model->validate()) {
+            $email = Yii::$app->request->post('User')['email'];
+            $firstname = Yii::$app->request->post('User')['first_name'];
+            $lastname = Yii::$app->request->post('User')['last_name'];
+
+            $user = new User();
+            $user->username = $email;
+            $user->first_name = $firstname;
+            $user->last_name = $lastname;
+            $user->email = $email;
+            $user->status = 10;
+            $user->auth_key = Yii::$app->security->generateRandomString();
+            $user->password_hash = $password_gen;
+            $user->role = 2;
+            $user->save();
+
+            $$html = "<p>Url: <a href='http://itsmiths.co.in/repflow/frontend/web/index.php'>Login</a></p>";
+            $$html .= "<p>Email: ".$email."</p>";
+            $$html .= "<p>Password: ".$password."</p>";
+            $$html .= "";
+
+            Yii::$app->mailer->compose()
+                ->setTo($email)
+                ->setFrom(["admin@repflow.com" => "Admin"])
+                ->setSubject("Invited")
+                ->setTextBody($html)
+                ->send();
+
+            return $user;           
+        } else {
+            $errors = $model->errors;
+            $errors['errors'] = 'true';
+            return $errors;
+        }
+
+    }
 
 }
