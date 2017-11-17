@@ -322,6 +322,44 @@ $(function() {
             $noteAside.removeClass(leftAsideClass);
             bindNoteListEvents('remove');
         }
-    }); 
+    });
+
+
+    $('#salesModal').on('hidden.bs.modal', function() {
+        $(".success").fadeOut();
+        $("#login-form").fadeIn();
+        $("#login-form input[type=text], #login-form input[type=email]").val("");
+    })
+
+    // custom
+    $('body').on('beforeSubmit', 'form#login-form', function() {
+        var form = $(this);
+        if (form.find('.has-error').length) {
+          return false;
+        }
+
+        $(".log-btn").attr('disabled', 'disabled');
+       
+        $.ajax({
+          url: form.attr('action'),
+          type: 'post',
+          data: form.serialize(),
+          success: function(resp) {
+            if(resp.errors){
+                $("#error").text(resp.email[0])
+            }else{
+                $("#error").text("");
+                $("#login-form").fadeOut(100, function(){
+                    $(".success").fadeIn();
+                });
+
+            }
+            $(".log-btn").removeAttr('disabled');
+          }
+        });
+
+        return false;
+      }); 
+
 });
 })(jQuery);
