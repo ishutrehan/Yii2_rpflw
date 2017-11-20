@@ -4368,3 +4368,15 @@ border-bottom-right-radius: 0; }
 .cont_team h4{ margin: 0; }
 
 .ourteam_section{ padding: 0 115px; width: 100%; display: inline-block; }
+
+
+.fileimg{ margin-top: 10px; }
+
+.fileimg input[type="file"]{ display: none; }
+.fileimg label span {
+    background: #449d44;
+    color: #fff;
+    border-radius: 30px;
+    padding: 8px 24px;
+    cursor: pointer;
+}

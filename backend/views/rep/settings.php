@@ -82,7 +82,7 @@ $this->title = 'Settings';
                     <label for="inputPassword1" class="col-lg-3 col-sm-3 control-label">Password</label>
                     <div class="col-lg-9">
                         <input class="form-control" id="inputPassword1" placeholder="Password" name="password" type="password">
-                        <span class="notdv">Note: If you do not enter password and new password then your other information will be update or you enter your existing password and new password then your password will be update.</span>
+                        <span class="notdv">Note: To set a new password, please type your existing password.</span>
                     </div>
                 </div>
                 <div class="form-group">

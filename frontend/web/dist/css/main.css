@@ -4324,7 +4324,7 @@ landing page
     padding: 20px;
     box-shadow: 0 2px 3px #b1b1b1; }
 
-    .fileimg{ margin-top: 10px; }
+.fileimg{ margin-top: 10px; }
 
 .fileimg input[type="file"]{ display: none; }
 .fileimg label span {
@@ -4335,6 +4335,9 @@ landing page
     cursor: pointer;
 }
 
+.sales-index h1{ float: left; }
+.right_breadcrum{ float: right; }
+
 
 @media (max-width: 767px) {
 .sales-create .login_area {
@@ -4342,3 +4345,5 @@ landing page
 }
 
 }
+
+
