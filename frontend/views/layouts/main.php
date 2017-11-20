@@ -65,40 +65,109 @@ AppAsset::register($this);
                                     </button>
                                     <input type="text" id="srch" class="form-control" name="searchbar" placeholder="Search here..." value="<?php if(isset($_GET['searchbar'])){ echo $_GET['searchbar'];}?>">
                                 </form>
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li class="dropdown">
+                                        <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-bell-o"></i>
+                                            <span class="badge">5</span>
+                                        </a>
+                                        <!--dropdown -->
+                                        <ul class="dropdown-menu dropdown-menu--responsive">
+                                            <div class="dropdown-header">Notifications (12)</div>
+                                            <ul class="Notification-list Notification-list--small niceScroll list-group" tabindex="0" style="overflow: hidden; outline: none;">
+                                                <li class="Notification list-group-item">
+                                                    <button class="Notification__status Notification__status--read" type="button" name="button"></button>
+                                                    <a href="">
+                                                        <div class="Notification__avatar Notification__avatar--danger pull-left" href="">
+                                                            <i class="Notification__avatar-icon fa fa-bolt"></i>
+                                                        </div>
+                                                        <div class="Notification__highlight">
+                                                            <p class="Notification__highlight-excerpt"><b>Server Error Report</b></p>
+                                                            <p class="Notification__highlight-time">1.2 hours ago</p>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="Notification list-group-item">
+                                                    <button class="Notification__status Notification__status--read" type="button" name="button"></button>
+                                                    <a href="">
+                                                        <div class="Notification__avatar Notification__avatar--success pull-left" href="">
+                                                            <i class="Notification__avatar-icon fa fa-user-plus"></i>
+                                                        </div>
+                                                        <div class="Notification__highlight">
+                                                            <p class="Notification__highlight-excerpt"><b>New Member Registration</b></p>
+                                                            <p class="Notification__highlight-time">2 hours ago</p>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="Notification list-group-item">
+                                                    <button class="Notification__status Notification__status--read" type="button" name="button"></button>
+                                                    <a href="">
+                                                        <div class="Notification__avatar pull-left" href="">
+                                                            <img src="imgs/a0.jpg" alt="...">
+                                                        </div>
+                                                        <div class="Notification__highlight">
+                                                            <p class="Notification__highlight-excerpt"><b>Tomas Edison</b> and 4 other people like your post “keep clam and watch the fizz”.</p>
+                                                            <p class="Notification__highlight-time">1 day ago</p>
+                                                        </div>
+                                                    </a>
+                                                </li>
+
+                                                <li class="Notification list-group-item">
+                                                    <button class="Notification__status Notification__status--unread" type="button" name="button"></button>
+                                                    <a href="">
+                                                        <div class="Notification__avatar pull-left" href="">
+                                                            <img src="imgs/a0.jpg" alt="...">
+                                                        </div>
+                                                        <div class="Notification__highlight">
+                                                            <p class="Notification__highlight-excerpt"><b>Luciad Extic</b> can join conference.</p>
+                                                            <p class="Notification__highlight-time">1 hour ago</p>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="dropdown-footer"><a href="">View more</a></div>
+                                        <div id="ascrail2000" class="nicescroll-rails nicescroll-rails-vr" style="width: 12px; z-index: 10; cursor: default; position: absolute; top: 0px; left: 308px; height: 0px; display: none;"><div class="nicescroll-cursors" style="position: relative; top: 0px; float: right; width: 8px; height: 0px; background-color: rgb(0, 0, 0); border: 2px solid transparent; background-clip: padding-box; border-radius: 10px;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails nicescroll-rails-hr" style="height: 12px; z-index: 10; top: -12px; left: 0px; position: absolute; cursor: default; display: none;"><div class="nicescroll-cursors" style="position: absolute; top: 0px; height: 8px; width: 0px; background-color: rgb(0, 0, 0); border: 2px solid transparent; background-clip: padding-box; border-radius: 10px;"></div></div></ul>
+                                        <!--/ dropdown -->
+                                    </li>
+                                    
+                                    <li class="dropdown dropdown-usermenu">
+                                        <a href="#" class=" dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <div class="user-avatar">
+                                                <?php if(empty(Yii::$app->user->identity->image)) { ?>
+                                                    <img src="images/BlankUser.png" alt="...">
+                                                <?php } else { ?>
+                                                    <img src="uploads/<?=Yii::$app->user->identity->image ?>" alt="...">
+                                                <?php }  ?>
+
+                                            </div>
+                                            <span class="hidden-sm hidden-xs">
+                                                <?=Yii::$app->user->identity->first_name ?> <?=Yii::$app->user->identity->last_name ?>
+                                            </span>
+                                            <!--<i class="fa fa-angle-down"></i>-->
+                                            <span class="caret hidden-sm hidden-xs"></span>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a data-method="post" href="<?= Url::to(['site/logout'])?>"><i class="fa fa-sign-out"></i> Log Out</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a data-toggle="ui-aside-right" href=""><i class="glyphicon glyphicon-option-vertical"></i></a>
+                                    </li>
+                                </ul>
 
                                 <!--search end-->
 
                                 <!--notification start-->
                                 <?php
-                                 $image = Yii::$app->user->identity->image;
+                                $image = Yii::$app->user->identity->image;
                                 $first = Yii::$app->user->identity->first_name;
-
                                 $last = Yii::$app->user->identity->last_name;
                                 ?>
-                               <ul class="nav navbar-nav navbar-right">
-
-                        <li class="dropdown dropdown-usermenu">
-                            <a href="#" class=" dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <div class="user-avatar"><img src="uploads/<?= $image ?>" alt="..."></div>
-                                <span class="hidden-sm hidden-xs"><?php echo $first." ".$last ?></span>
-                                <!-- <i class="fa fa-angle-down"></i> -->
-                              <span class="caret hidden-sm hidden-xs"></span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <!-- <li><a href="#"><i class="fa fa-cogs"></i>  Settings</a></li>
-                                <li><a href="#"><i class="fa fa-user"></i>  Profile</a></li>
-                                <li><a href="#"><i class="fa fa-commenting-o"></i>  Feedback</a></li>
-                                <li><a href="#"><i class="fa fa-life-ring"></i>  Help</a></li>
-                                <li class="divider"></li> -->
-                                <li><a href="<?= Url::to(['site/logout'])?>" data-method="post""><i class="fa fa-sign-out"></i> Log Out</a></li>
-                            </ul>
-                      
-                        </li>
-                 
-                  
-
-
-                    </ul>
+                                
                                 <!--notification end-->
 
                             </div>

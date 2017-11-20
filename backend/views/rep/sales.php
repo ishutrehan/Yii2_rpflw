@@ -10,9 +10,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="sales-index">
 	<h3><?= Html::encode($this->title) ?></h3>
 	 <div class="right_breadcrum"><?= Breadcrumbs::widget([
-                        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                    ]) ?>
-                    </div>
+        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+    ]) ?>
+    </div>
 	<div class="row">
 		<div class="container">
 			<?php if (Yii::$app->session->hasFlash('Success')): ?>

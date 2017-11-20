@@ -130,7 +130,13 @@ AppAsset::register($this);
                             
                             <li class="dropdown dropdown-usermenu">
                                 <a href="#" class=" dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <div class="user-avatar"><img src="uploads/<?=Yii::$app->user->identity->image ?>" alt="..."></div>
+                                    <div class="user-avatar">
+                                        <?php if(empty(Yii::$app->user->identity->image)) { ?>
+                                            <img src="images/BlankUser.png" alt="...">
+                                        <?php } else { ?>
+                                            <img src="uploads/<?=Yii::$app->user->identity->image ?>" alt="...">
+                                        <?php }  ?>                                
+                                    </div>
                                     <span class="hidden-sm hidden-xs">
                                         <?=Yii::$app->user->identity->first_name ?> <?=Yii::$app->user->identity->last_name ?>
                                     </span>
