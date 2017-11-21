@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\User;
 use yii\web\UploadedFile;
+use yii\helpers\Url;
 /**
  * RepController implements the CRUD actions for Sales model.
  */
@@ -38,9 +39,10 @@ class RepController extends Controller
     {
         // $searchModel = new SalesSearch();
         // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-       
-        $model = Sales::find()
+       if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+    }
+           $model = Sales::find()
                 ->select('*')
                 ->where(['user_id' => Yii::$app->user->identity->id])
                 ->all();  
@@ -56,6 +58,9 @@ class RepController extends Controller
      */
     public function actionView($id)
     {
+       if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+    }
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -68,6 +73,9 @@ class RepController extends Controller
      */
     public function actionCreate()
     {
+       if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+    }
         $model = new Sales();
 
         $model->payment_status = 'Unpaid';
@@ -92,6 +100,9 @@ class RepController extends Controller
      */
     public function actionUpdate($id)
     {
+       if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+        }
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -135,6 +146,10 @@ class RepController extends Controller
 
     public function actionInvoice($id) 
     {
+         if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+          }
+
         $model = $this->findModel($id);
 
         $old_date = date($model->finalize_date);
@@ -153,7 +168,9 @@ class RepController extends Controller
 
     public function actionSettings() 
     {
-        
+      if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+        }
         $user = User::findOne(Yii::$app->user->id);
         return $this->render('settings', [
             'user' => $user
@@ -161,8 +178,11 @@ class RepController extends Controller
     }
 
 
-   public function actionUpdateuser(){
-
+   public function actionUpdateuser()
+   {
+    if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+        }
     $user = User::findOne(Yii::$app->user->id);
     $pass = $user['password_hash'];
     $oldimage = $user['image'];
@@ -184,8 +204,6 @@ class RepController extends Controller
               move_uploaded_file($file_tmp,"uploads/".$file_name);
            }
 
-
-
         $password = $_POST['password'];
 
         $user->first_name = $_POST['first_name'];
@@ -196,39 +214,45 @@ class RepController extends Controller
         $user->zip_code = $_POST['zip'];
         $msg = 0;
 
-        if(isset($_POST['password']) && !empty($_POST['password']) && !empty($_POST['newpassword']) && ($_POST['newpassword']) == ($_POST['confirmpassword'])) {
+        if(!empty($_POST['password']) && !empty($_POST['newpassword'])) {
+
+          if($_POST['newpassword'] == $_POST['confirmpassword']) {
 
             if(Yii::$app->security->validatePassword($password, $pass)){
+
                 $pass = Yii::$app->security->generatePasswordHash($_POST['newpassword']);
             }else{
                 $msg = 1;
             }
+          }else{
+              $msg = 2;
+          }  
         }
 
         $check = (isset($_POST['check']) && !empty($_POST['check'])) ? $_POST['check'] : 'no';
-
         $user->password_hash = $pass;
         $user->notification = $check;
         $user->image = $file_name;
         $user->save();
-        if($msg){
+        if($msg==1){
             Yii::$app->session->setFlash('error', 'Incorrect password.');
+        }elseif($msg == 2){
+          Yii::$app->session->setFlash('error', 'Password and Confirm password not match.');
         }
         else{
             Yii::$app->session->setFlash('Success',"Your information has been updated");
         }
         
         return $this->redirect(['/rep/settings']);
-        }else{
-           return $this->render('settings', [
-                'user' => $user
-            ]);
         }
     }
 
 
-    public function actionTeam(){
-        
+    public function actionTeam()
+        {
+          if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+        }        
         $created_at = date('m/d/Y');
 
         $monday = strtotime('last monday', strtotime('tomorrow'));
@@ -282,15 +306,14 @@ class RepController extends Controller
 
 
     public function actionSearch(){
-            
+   
+    if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+        }         
      $search = Sales::find()
         ->where('jobnumber LIKE :query') 
         ->addParams([':query'=>'%'.$_GET['searchbar'].'%'])
-        ->all();
-
-         //    echo"<pre>";
-         // print_r($search);
-         //   die;                    
+        ->all();                  
 
         return $this->render('search',[
             'search' => $search,

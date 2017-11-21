@@ -6,11 +6,21 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use yii\widgets\Breadcrumbs;
 /* @var $this yii\web\View */
 /* @var $model app\models\RepForm */
-
 $this->title = 'Settings';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="sales-index">
+  <div class="row">
+        <div class="col-md-12"><h1><?= Html::encode($this->title) ?></h1>
+            <div class="right_breadcrum"><?= Breadcrumbs::widget([
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ]) ?>
+            </div>
+        </div>
+    </div>
 <div class="panel-body">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -129,4 +139,5 @@ $this->title = 'Settings';
             <?php ActiveForm::end(); ?>
         </div>
     </div>
+</div>
 </div>

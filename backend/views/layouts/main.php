@@ -34,8 +34,8 @@ AppAsset::register($this);
                     <div class="navbar-header">
                         <!--logo start-->
                         <a href="" class="navbar-brand">
-                            <span class="logo"><!-- <img src="imgs/logo-dark.png" alt=""/> -->
-                                Repflow
+                            <span class="logo"> <a href="<?=Url::toRoute('/site/index') ?>"><img src="images/LogoHeader.png"/></a>
+                               <!--  Repflow -->
                             </span>
                         </a>
                         <!--logo end-->
@@ -53,11 +53,12 @@ AppAsset::register($this);
                     <div class="navbar-collapse nav-responsive-disabled">
                         <!--search start-->
                         <?php if(!Yii::$app->user->isGuest) { ?>
-                        <form class="search-content hidden-xs" >
+                        <form class="search-content hidden-xs" method="GET">
+                        <input type="hidden" name="r" value="rep/search">
                             <button type="submit" name="search" class="btn srch-btn">
                                 <i class="fa fa-search"></i>
                             </button>
-                            <input type="text" class="form-control" name="keyword" placeholder="Search here...">
+                            <input type="text" class="form-control" name="keyword" placeholder="Search here..." value="<?php if(isset($_GET['keyword'])){ echo $_GET['keyword'];} ?>">
                         </form>
                         <!--search end-->
                         <!--notification start-->                       
