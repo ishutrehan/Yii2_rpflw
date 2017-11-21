@@ -6,7 +6,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
-
+use common\models\Sales;
 /**
  * Site controller
  */
@@ -60,7 +60,56 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+
+        $created_at = date('m/d/Y');
+
+        $monday = strtotime('last monday', strtotime('tomorrow'));
+        $sunday = strtotime('+6 days', $monday);
+
+        $currntweek = date('m/d/Y', $monday); 
+        $endweek = date('m/d/Y', $sunday);
+        
+        $first_date = date('m/d/Y',strtotime('first day of this month'));
+        $last_date = date('m/d/Y',strtotime('last day of this month'));
+
+      $start_date = date("m/d/Y",strtotime('first day of January'));
+      $end_date = date("m/d/Y",strtotime('last day of December'));
+
+        $daily = Sales::find()
+                ->select('commission_amt')
+                ->where(['status' => 'completed','finalize_date' => $created_at])
+                ->count();
+
+
+        $week = Sales::find()
+                ->select('commission_amt')
+                ->where(['between','finalize_date', $currntweek,$endweek])
+                ->andwhere(['status' => 'completed'])
+                ->count();        
+
+        $month = Sales::find()
+                ->where(['between','finalize_date', $first_date,$last_date])
+                ->andwhere(['status' => 'completed'])
+                ->count();   
+
+          $year = Sales::find()
+                ->where(['between','finalize_date', $start_date,$end_date])
+                ->andwhere(['status' => 'completed'])
+                ->count(); 
+
+        $sales = Sales::find()
+                ->select('revenue')
+                ->where(['between','finalize_date', $currntweek,$endweek])
+                ->andwhere(['status' => 'completed'])
+                ->count();                  
+
+        return $this->render('index',[
+             'daily' => $daily,
+            'week' => $week,
+            'month' => $month,
+            'year' => $year,
+            'sales' => $sales,
+            ]);
     }
 
     /**

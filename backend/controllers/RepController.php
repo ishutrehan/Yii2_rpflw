@@ -40,7 +40,8 @@ class RepController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        die("INDEX");
+        
+
     }
     
     /**
@@ -295,6 +296,22 @@ class RepController extends Controller
             return $this->redirect(['/rep/settings']);
 
         }
+    }
+
+
+   public function actionSearch(){
+   
+    if(Yii::$app->user->isGuest) {
+        return $this->goHome();
+        }         
+     $search = Sales::find()
+        ->where('jobnumber LIKE :query') 
+        ->addParams([':query'=>'%'.$_GET['keyword'].'%'])
+        ->all();                  
+
+        return $this->render('search',[
+            'search' => $search,
+            ]);
     }
 
 }
