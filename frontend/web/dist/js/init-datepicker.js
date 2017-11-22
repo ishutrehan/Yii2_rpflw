@@ -5,7 +5,9 @@
     $(document).ready(function() {
 
         $('.js-datepicker').datepicker({
-            autoclose: true
+            format: 'yyyy-mm-dd',
+            setDate: new Date(),
+            autoclose: true,
         });
 
         $('.input-group.date').datepicker({

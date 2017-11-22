@@ -24,6 +24,10 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
+
+<script type="text/javascript">
+    var BaseUrl = "<?php echo Yii::$app->request->baseUrl;?>";
+</script>
 <body style="background: #eaeef3;">
 <?php $this->beginBody() ?>
 <div id="ui" class="ui ui-aside-none">

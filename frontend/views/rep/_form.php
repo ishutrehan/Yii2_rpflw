@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(['method' => 'post']); ?>
 
-    <?= $form->field($model, 'order_date')->textInput(['maxlength' => true, 'class' => 'form-control js-datepicker', 'placeholder' => "mm/dd/yyyy" ]) ?>
+    <?= $form->field($model, 'order_date')->textInput(['maxlength' => true, 'class' => 'form-control js-datepicker', 'placeholder' => "yyyy-mm-dd" ]) ?>
 
     <?= $form->field($model, 'firstname')->textInput(['maxlength' => true])->label('First Name') ?>
 
@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
         ['pending'=>'Pending','completed'=>'Completed','cancelled'=>'Cancelled']    // options
         ) ?>
 
-     <?= $form->field($model, 'finalize_date')->textInput(['maxlength' => true,'class' => 'form-control js-datepicker','placeholder' => "mm/dd/yyyy"]) ?>
+     <?= $form->field($model, 'finalize_date')->textInput(['maxlength' => true,'class' => 'form-control js-datepicker','placeholder' => "yyyy-mm-dd"]) ?>
 
     <?= $form->field($model, 'note')->textarea(['rows' => 6])->label('Notes') ?>
 
