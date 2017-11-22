@@ -101,7 +101,7 @@ class SiteController extends Controller
             }
 
             if(Yii::$app->user->identity->role == 1) {
-                return $this->redirect(Yii::$app->urlManagerFrontend->createUrl('/site/index'));
+                return $this->redirect(Yii::$app->urlManagerFrontend->createUrl('site/index'));
             }
             if(Yii::$app->user->identity->role == 2) {
                 return $this->redirect(['rep/index']);

@@ -34,7 +34,7 @@ AppAsset::register($this);
                     <div class="navbar-header">
                         <!--logo start-->
                         <a href="" class="navbar-brand">
-                            <span class="logo"> <a href="<?=Url::toRoute('/site/index') ?>"><img src="images/LogoHeader.png"/></a>
+                            <span class="logo"> <a href="<?=Url::toRoute('site/index') ?>"><img src="images/LogoHeader.png"/></a>
                                <!--  Repflow -->
                             </span>
                         </a>
