@@ -6,48 +6,88 @@
 $(function () {
 
     if($("#basic-line").length) {
- 
-        Highcharts.chart('basic-line', {
-            title: {
-                text: 'Monthly Financials '+(new Date().getFullYear()),
-                x: -20 //center
-            },
-            subtitle: {
-                text: '',
-                x: -20
-            },
-            xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            },
-            yAxis: {
+        function visitorData(months, arrRevenue, newCom) {
+            Highcharts.chart('basic-line', {
                 title: {
-                    text: 'Temperature (°C)'
+                    text: 'Monthly Financials '+(new Date().getFullYear()),
+                    x: -20 //center
                 },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
+                subtitle: {
+                    text: '',
+                    x: -20
+                },
+                xAxis: {
+                    categories: months
+                },
+                yAxis: {
+                    title: {
+                        text: 'Amount'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [{
+                    name: 'Revenue',
+                    data: arrRevenue
+                }, {
+                    name: 'Profits',
+                    data: newCom
                 }]
-            },
-            tooltip: {
-                valueSuffix: '°C'
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle',
-                borderWidth: 0
-            },
-            series: [{
-                name: 'Berlin',
-                data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-            }, {
-                name: 'London',
-                data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-            }]
+            });
+        }
+
+        // financials data
+        $.ajax({
+            url: BaseUrl+'/index.php?r=rep/financials-data',
+            type: 'GET',
+            async: true,
+            dataType: "json",
+            success: function (data) {
+                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];                
+                var arrRevenue = [];
+                var arrCommissions = [];
+                for(var key in months) {
+                    var k = 0;
+                    for(var com in data.revenue) {
+                        if(months[key] == data.revenue[com].Month) {
+                            arrRevenue[key] = parseFloat(data.revenue[com].revenue);
+                            k = 1;
+                        }else{
+                            if(!k) arrRevenue[key] = 0;
+                        }
+                    } 
+                    var j = 0;
+                    for(var com in data.commissions) {
+                        if(months[key] == data.commissions[com].Month) {
+                            arrCommissions[key] = parseFloat(data.commissions[com].commission);
+                            j = 1;
+                        }else{
+                            if(!j) arrCommissions[key] = 0;
+                        }
+                    }                
+                }
+                var newCom = [];
+                for (var i = 0; i < arrRevenue.length; i++) {
+                    newCom[i] = arrRevenue[i] - arrCommissions[i];
+                } 
+                visitorData(months, arrRevenue, newCom);
+            }
         });
     }
+
 });
 
 // // area inverted

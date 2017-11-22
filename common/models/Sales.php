@@ -36,8 +36,9 @@ class Sales extends \yii\db\ActiveRecord
         return [
             [['order_date', 'firstname', 'lastname', 'jobnumber', 'products_sold', 'commission_amt', 'status', 'finalize_date', 'note'], 'required'],
             [['note'], 'string'],
-            [['order_date', 'firstname', 'lastname', 'products_sold', 'status', 'finalize_date'], 'string', 'max' => 255],
+            [['order_date', 'firstname', 'lastname', 'products_sold', 'status'], 'string', 'max' => 255],
             [['jobnumber', 'commission_amt','revenue'], 'integer'],
+            // [['finalize_date'], 'date'],
         ];
     }
 

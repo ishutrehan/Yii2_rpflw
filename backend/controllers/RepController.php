@@ -72,6 +72,23 @@ class RepController extends Controller
         return $this->render('financials');
     }
 
+    public function actionFinancialsData()
+    {
+        $connection = \Yii::$app->db;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = $connection->createCommand('SELECT DATE_FORMAT(`finalize_date`, "%b") AS Month, SUM(`revenue`) as revenue FROM sales WHERE `status` = "completed" GROUP BY DATE_FORMAT(`finalize_date`, "%b")');
+        $revenue = $model->queryAll();
+
+        $model = $connection->createCommand('SELECT DATE_FORMAT(`finalize_date`, "%b") AS Month, SUM(`commission_amt`) as commission FROM sales WHERE `status` = "completed" GROUP BY DATE_FORMAT(`finalize_date`, "%b")');
+        $commissions = $model->queryAll();
+        $resp = array(
+            'revenue' => $revenue,   
+            'commissions' => $commissions   
+        );
+        return $resp;
+
+    }
+
     /**
      * Lists all Sales models.
      * @return mixed
