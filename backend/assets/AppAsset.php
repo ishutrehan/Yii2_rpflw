@@ -18,6 +18,7 @@ class AppAsset extends AssetBundle
         'bower_components/weather-icons/css/weather-icons.min.css',
         'bower_components/themify-icons/css/themify-icons.css',
         'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css',
+        'bower_components/morris.js/morris.css',
         'dist/css/main.css',
     ];
     public $js = [
@@ -34,6 +35,9 @@ class AppAsset extends AssetBundle
         'bower_components/highcharts/highcharts.js',
         'bower_components/highcharts/highcharts-more.js',
         'bower_components/highcharts/modules/exporting.js',
+        'bower_components/raphael/raphael.min.js',
+        'bower_components/morris.js/morris.min.js',
+        'dist/js/init-morris.js',
         'dist/js/modernizr-custom.js',
         'dist/js/init-highcharts-inner.js',
         'dist/js/init-datatables.js',
