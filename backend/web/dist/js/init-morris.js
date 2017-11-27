@@ -71,35 +71,77 @@
 
 
 // Use Morris.Area instead of Morris.Line
-Morris.Area({
-    element: 'graph-area-line',
-    behaveLikeLine: false,
-    data: [
-        {x: '2011 Q1', y: 3, z: 3},
-        {x: '2011 Q2', y: 2, z: 1},
-        {x: '2011 Q3', y: 2, z: 4},
-        {x: '2011 Q4', y: 3, z: 3},
-        {x: '2011 Q5', y: 3, z: 4}
-    ],
-    xkey: 'x',
-    ykeys: ['y', 'z'],
-    labels: ['Y', 'Z'],
-    lineColors:['#4aa9e9','#eac459']
-});
 
-// Use Morris.Area instead of Morris.Line
-Morris.Donut({
-    element: 'graph-donut',
-    data: [
-        {value: 70, label: 'foo', formatted: 'at least 70%' },
-        {value: 15, label: 'bar', formatted: 'approx. 15%' },
-        {value: 10, label: 'baz', formatted: 'approx. 10%' },
-        {value: 5, label: 'A really really long label', formatted: 'at most 5%' }
-    ],
-    backgroundColor: '#fff',
-    labelColor: '#626262',
-    colors: [
-        '#62549a','#4aa9e9','#23b9a9','#eac459'
-    ],
-    formatter: function (x, data) { return data.formatted; }
+
+
+$(document).ready(function() {
+
+    if($("#graph-donut").length) {
+
+
+        $.ajax({
+            url: BaseUrl + '/index.php?r=rep/team-data',
+            type: 'GET',
+            async: true,
+            dataType: "json",
+            success: function(data) {
+                var dataArr = [];
+                for (var key in data) {
+                    dataArr.push({
+                        label: data[key].label,
+                        value: parseInt(data[key].value),
+                        formatted: "approx. " + parseInt(data[key].value) + "%"
+                    })
+                }
+
+                // Use Morris.Area instead of Morris.Line
+                Morris.Donut({
+                    element: 'graph-donut',
+                    data: dataArr,
+                    backgroundColor: '#fff',
+                    labelColor: '#626262',
+                    colors: [
+                        '#62549a', '#4aa9e9', '#23b9a9', '#eac459'
+                    ],
+                    formatter: function(x, data) {
+                        return data.formatted;
+                    }
+                });
+
+            }
+        });
+    }
+
+    if($("#graph-area-line").length) {
+
+        $.ajax({
+            url: BaseUrl + '/index.php?r=rep/products-data',
+            type: 'GET',
+            async: true,
+            dataType: "json",
+            success: function(data) {
+                var d = new Date();
+                var arr = [];
+                var idx = 1; 
+                for(var key in data.revenue){
+                    console.log(data.revenue[key], data.commissions[key]);
+                    arr.push({
+                        x: d.getFullYear() + " Q"+idx,
+                        z: parseFloat(data.revenue[key].revenue),
+                        y: parseFloat(data.revenue[key].revenue) - parseFloat(data.commissions[key].commission)
+                    }) 
+                    idx++;
+                }
+                Morris.Area({
+                    element: 'graph-area-line',
+                    behaveLikeLine: false,
+                    data: arr,
+                    xkey: 'x',
+                    ykeys: ['y', 'z'],
+                    labels: ['Commissions', 'Revenue'],
+                    lineColors: ['#4aa9e9', '#eac459']
+                });
+            }
+        });
+    }
 });

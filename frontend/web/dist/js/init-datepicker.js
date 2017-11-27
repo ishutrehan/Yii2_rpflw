@@ -6,7 +6,7 @@
 
         $('.js-datepicker').datepicker({
             format: 'yyyy-mm-dd',
-            setDate: new Date(),
+            // setDate: new Date(),
             autoclose: true,
         });
 

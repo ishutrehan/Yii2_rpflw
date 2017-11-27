@@ -10,6 +10,7 @@ use yii\web\Response;
 use common\models\User;
 use common\models\Sales;
 use frontend\models\SignupForm;
+use common\models\Notifications;
 
 /**
  * RepController implements the CRUD actions for Sales model.
@@ -109,6 +110,48 @@ class RepController extends Controller
         ]);
     }
 
+    public function actionTeamData()
+    {
+        $date = date("Y-m-d");
+        $ts = strtotime($date);
+        $start = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
+        $start_date = date('Y-m-d', $start);
+        $end_date = date('Y-m-d', strtotime('next saturday', $start));
+
+        $connection = \Yii::$app->db;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = $connection->createCommand('SELECT P.first_name as label, SUM(F.revenue) as value FROM sales F INNER JOIN user P ON F.user_id = P.id WHERE F.status = "completed" AND (date(F.finalize_date) BETWEEN "'.$start_date.'" AND "'.$end_date.'") GROUP BY F.user_id');
+        $revenue = $model->queryAll();
+        return $revenue;
+    }
+
+    public function actionProductsData()
+    {
+        $date = date("Y-m-d");
+        $ts = strtotime($date);
+        $start = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
+        $start_date = date('Y-m-d', $start);
+        $end_date = date('Y-m-d', strtotime('next saturday', $start));
+
+        $connection = \Yii::$app->db;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = $connection->createCommand('SELECT DATE_FORMAT(`finalize_date`, "%d") AS Day, SUM(`revenue`) as revenue FROM sales WHERE `status` = "completed" AND (date(finalize_date) BETWEEN "'.$start_date.'" AND "'.$end_date.'")  GROUP BY DATE_FORMAT(`finalize_date`, "%d")');
+
+        $revenue = $model->queryAll();
+
+        $model = $connection->createCommand('SELECT DATE_FORMAT(`finalize_date`, "%d") AS Day, SUM(`commission_amt`) as commission FROM sales WHERE `status` = "completed" AND (date(finalize_date) BETWEEN "'.$start_date.'" AND "'.$end_date.'") GROUP BY DATE_FORMAT(`finalize_date`, "%d")');
+        $commissions = $model->queryAll();
+        
+        $resp = array(
+            'revenue' => $revenue,   
+            'commissions' => $commissions   
+        );
+        return $resp;
+
+    }
+
     /**
      * Lists all Sales models.
      * @return mixed
@@ -138,14 +181,74 @@ class RepController extends Controller
         $model = $this->findModel($id);
 
         if(Yii::$app->request->post('update')) {
+
+          $finalize_date = $model->finalize_date;  
+
           $model->payment_status = Yii::$app->request->post('Sales')['payment_status'];
           $model->finalize_date = Yii::$app->request->post('Sales')['finalize_date'];
           $model->revenue = Yii::$app->request->post('Sales')['revenue'];
           $model->status = Yii::$app->request->post('Sales')['status'];
+
           if( Yii::$app->request->post('Sales')['status'] == "completed") {
             $model->completed_date = date("Y-m-d");
           }
           if ($model->save()) {
+            if(Yii::$app->request->post('Sales')['payment_status'] == 'Paid') {
+                $noti = new Notifications();
+                $noti->type = 'sale_paid';
+                $noti->job_number = $model->jobnumber;
+                $noti->user_id = $model->user_id;
+                $noti->message = "Sale is Marked as Paid By ".Yii::$app->user->identity->first_name." ".Yii::$app->user->identity->last_name;
+                $noti->save();
+
+                
+                $user = User::findOne($model->user_id);                
+                if($user->notification == 'yes') {
+                    $html = "Sale with Job Number.".($model->jobnumber)."  is Marked as Paid By ".Yii::$app->user->identity->first_name." ".Yii::$app->user->identity->last_name;
+                    Yii::$app->mailer->compose()
+                        ->setTo($user->email)
+                        ->setFrom(["admin@repflow.com" => "Admin"])
+                        ->setSubject("Sale Marked as Paid")
+                        ->setTextBody($html)
+                        ->send();
+                }
+                
+            }
+            if( Yii::$app->request->post('Sales')['status'] == "cancelled") {  
+                $user = User::findOne($model->user_id);
+                if($user->notification == 'yes') {             
+                    $html = "Sale with Job Number.".($model->jobnumber)." is Cancelled.";
+                    Yii::$app->mailer->compose()
+                        ->setTo($user->email)
+                        ->setFrom(["admin@repflow.com" => "Admin"])
+                        ->setSubject("Sale Cancelled")
+                        ->setTextBody($html)
+                        ->send();
+                }
+            }
+
+            if($finalize_date != Yii::$app->request->post('Sales')['finalize_date']) {
+                $noti = new Notifications();
+                $noti->type = 'sale_finalize_date';
+                $noti->job_number = $model->jobnumber;
+                $noti->user_id = $model->user_id;
+                $noti->message = "Finalize date of Sale with Job Number.".($model->jobnumber)." is  Changed from ".$finalize_date." to ".Yii::$app->request->post('Sales')['finalize_date'];
+                $noti->save();
+
+                $user = User::findOne($model->user_id);
+
+                if($user->notification == 'yes') {
+                    $html =  "Finalize date of Sale with Job Number.".($model->jobnumber)." is  Changed from ".$finalize_date." to ".Yii::$app->request->post('Sales')['finalize_date'];
+
+                    Yii::$app->mailer->compose()
+                        ->setTo($user->email)
+                        ->setFrom(["admin@repflow.com" => "Admin"])
+                        ->setSubject("Sale Finalize date Changed")
+                        ->setTextBody($html)
+                        ->send();
+                }
+            }
+
             Yii::$app->session->setFlash('Success',"Sale information has been updated");
             return $this->redirect(['sales']);
           }
@@ -229,6 +332,7 @@ class RepController extends Controller
             $user->last_name = $lastname;
             $user->email = $email;
             $user->status = 10;
+            $user->notification = 'yes';
             $user->auth_key = Yii::$app->security->generateRandomString();
             $user->password_hash = $password_gen;
             $user->role = 2;
@@ -329,6 +433,19 @@ class RepController extends Controller
         return $this->render('search',[
             'search' => $search,
             ]);
+    }
+
+    // notifications
+    public function actionNotifications()
+    {
+        $date = date("Y-m-d");
+        $connection = \Yii::$app->db;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = $connection->createCommand('SELECT * FROM notifications WHERE isRead=0 AND type IN("new_sale","sale_updated","sale_completed","sale_finalize_date_user") ORDER BY created_at DESC');
+        $revenue = $model->queryAll();
+        return $revenue;
+
     }
 
 }
