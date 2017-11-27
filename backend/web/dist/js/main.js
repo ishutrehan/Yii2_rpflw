@@ -362,4 +362,36 @@ $(function() {
       }); 
 
 });
+
+
+// check notifications
+
+setInterval(function(){
+    console.log("called...");
+    $.ajax({
+        url: BaseUrl+'/index.php?r=rep/notifications',
+        type: 'GET',
+        dataType: 'json',
+        data: {},
+    })
+    .done(function(data) {
+        var html = "";
+        if(data.length) {
+            for(var key in data) {
+                html += '<li class="Notification list-group-item"><button class="Notification__status Notification__status--read"name=button type=button></button> <a href=""><div class="Notification__avatar Notification__avatar--danger pull-left"href=""><i class="Notification__avatar-icon fa fa-bolt"></i></div><div class=Notification__highlight><p class=Notification__highlight-excerpt><b>#'+data[key].job_number+" - "+data[key].message+'</b><p class=Notification__highlight-time>'+data[key].created_at+'</div></a>';
+            }
+        }
+        $("div.noti-count").html("Notifications ("+data.length+")")
+        $("span.noti-badge").html(data.length)
+        $("ul.noti-list").html(html)
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+    
+}, 5000)
+
 })(jQuery);

@@ -70,6 +70,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <th>
                                                 Invoice
                                             </th>
+                                            <th>
+                                                Action
+                                            </th>
                                             
                                         </tr>
                                     </thead>
@@ -108,9 +111,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 echo $value['payment_status'];
                                             echo"</td>";
                                             echo'<td>';
-                                                // if($value['payment_status'] == 'Paid') {
+                                                if($value['payment_status'] == 'Paid' && $value['status'] == 'completed') {
                                                     echo Html::a('Download', ['rep/invoice', "id"=>$value['id']], ['class' => 'download-lnk']);
-                                                // }
+                                                }
+                                            echo"</td>";
+                                            echo'<td>';
+                                                echo Html::a('Edit', ['rep/update', "id"=>$value['id']], ['class' => 'download-lnk']);
                                             echo"</td>";
                                         echo"</tr>";
                                         }

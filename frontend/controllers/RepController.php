@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Sales;
+use common\models\Notifications;
 use common\models\SalesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -11,6 +12,7 @@ use yii\filters\VerbFilter;
 use common\models\User;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
+use yii\web\Response;
 /**
  * RepController implements the CRUD actions for Sales model.
  */
@@ -39,9 +41,9 @@ class RepController extends Controller
     {
         // $searchModel = new SalesSearch();
         // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-       if(Yii::$app->user->isGuest) {
-        return $this->redirect(Url::toRoute('site/login'));
-    }
+        if(Yii::$app->user->isGuest) {
+          return $this->redirect(Url::toRoute('site/login'));
+        }
            $model = Sales::find()
                 ->select('*')
                 ->where(['user_id' => Yii::$app->user->identity->id])
@@ -84,6 +86,14 @@ class RepController extends Controller
         $model->revenue = 0;
        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $noti = new Notifications();
+            $noti->type = 'sale_added';
+            $noti->job_number = Yii::$app->request->post('Sales')['jobnumber'];
+            $noti->user_id = Yii::$app->user->identity->id;
+            $noti->message = "New Sale is Added By ".Yii::$app->user->identity->first_name." ".Yii::$app->user->identity->last_name;
+            $noti->save();
+     
             return $this->redirect(['index', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -100,18 +110,59 @@ class RepController extends Controller
      */
     public function actionUpdate($id)
     {
-       if(Yii::$app->user->isGuest) {
-        return $this->redirect(Url::toRoute('site/login'));
-        }
-        $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+      if(Yii::$app->user->isGuest) {
+        return $this->redirect(Url::toRoute('site/login'));
+      }
+      
+      $model = $this->findModel($id);
+      
+      $finalize_date = $model->finalize_date; 
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+          if(Yii::$app->request->post('Sales')['status'] == 'completed') {
+              $noti = new Notifications();
+              $noti->type = 'sale_completed';
+              $noti->job_number = $model->jobnumber;
+              $noti->user_id = Yii::$app->user->identity->id;
+              $noti->message = "Sale is Updated and Marked as Completed By ".Yii::$app->user->identity->first_name." ".Yii::$app->user->identity->last_name;
+              $noti->save();
+          }else{
+            $noti = new Notifications();
+            $noti->type = 'sale_updated';
+            $noti->job_number = Yii::$app->request->post('Sales')['jobnumber'];
+            $noti->user_id = Yii::$app->user->identity->id;
+            $noti->message = "Sale is Updated By ".Yii::$app->user->identity->first_name." ".Yii::$app->user->identity->last_name;
+            $noti->save();
+          }
+          if(Yii::$app->request->post('Sales')['status'] == 'cancelled' && Yii::$app->user->identity->notification == 'yes') {
+
+            $html = "Sale with Job Number.".(Yii::$app->request->post('Sales')['jobnumber'])." is Cancelled.";
+            Yii::$app->mailer->compose()
+                ->setTo(Yii::$app->user->identity->email)
+                ->setFrom(["admin@repflow.com" => "Admin"])
+                ->setSubject("Sale Cancelled")
+                ->setTextBody($html)
+                ->send();
+          }
+
+          if($finalize_date != Yii::$app->request->post('Sales')['finalize_date']) {
+              $noti = new Notifications();
+              $noti->type = 'sale_finalize_date_user';
+              $noti->job_number = $model->jobnumber;
+              $noti->user_id = Yii::$app->user->identity->id;
+              $noti->message = "Finalize date of Sale with Job Number.".($model->jobnumber)." is  Changed from ".$finalize_date." to ".Yii::$app->request->post('Sales')['finalize_date'];
+              $noti->save();
+
+          }
+
+          return $this->redirect(['index']);
+      } else {
+          return $this->render('update', [
+              'model' => $model,
+          ]);
+      }
     }
 
     /**
@@ -307,17 +358,30 @@ class RepController extends Controller
 
     public function actionSearch(){
    
-    if(Yii::$app->user->isGuest) {
-        return $this->redirect(Url::toRoute('site/login'));
-        }         
-     $search = Sales::find()
-        ->where('jobnumber LIKE :query') 
-        ->addParams([':query'=>'%'.$_GET['searchbar'].'%'])
-        ->all();                  
+      if(Yii::$app->user->isGuest) {
+          return $this->redirect(Url::toRoute('site/login'));
+      }         
+      $search = Sales::find()
+          ->where('jobnumber LIKE :query') 
+          ->addParams([':query'=>'%'.$_GET['searchbar'].'%'])
+          ->all();                  
 
-        return $this->render('search',[
-            'search' => $search,
-            ]);
+          return $this->render('search', [
+              'search' => $search,
+              ]);
+    }
+
+    // notifications
+    public function actionNotifications()
+    {
+        $date = date("Y-m-d");
+        $connection = \Yii::$app->db;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = $connection->createCommand('SELECT * FROM notifications WHERE isRead=0 AND type IN("sale_paid","sale_finalize_date") ORDER BY created_at DESC');
+        $revenue = $model->queryAll();
+        return $revenue;
+
     }
 
 }

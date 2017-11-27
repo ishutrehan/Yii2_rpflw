@@ -21,8 +21,8 @@ class AppAsset extends AssetBundle
         'dist/css/main.css',
     ];
     public $js = [
+        // 'bower_components/jquery/dist/jquery.min.js',
         'bower_components/bootstrap/dist/js/bootstrap.min.js',
-        'dist/js/modernizr-custom.js',
         'bower_components/jquery.nicescroll/dist/jquery.nicescroll.min.js',
         'bower_components/autosize/dist/autosize.min.js',
         'bower_components/datatables.net/js/jquery.dataTables.min.js',
@@ -31,11 +31,11 @@ class AppAsset extends AssetBundle
         'bower_components/datatables-colvis/js/dataTables.colVis.js',
         'bower_components/datatables-responsive/js/dataTables.responsive.js',
         'bower_components/datatables-scroller/js/dataTables.scroller.js',
-        'dist/js/init-datatables.js',
-       // 'dist/js/main.js',
-        'bower_components/jquery/dist/jquery.min.js',
         'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
+        'dist/js/init-datatables.js',
+        'dist/js/modernizr-custom.js',
         'dist/js/init-datepicker.js',
+        'dist/js/main.js',
     ];
     public $depends = [
         'yii\web\YiiAsset'

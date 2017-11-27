@@ -25,7 +25,9 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-
+<script type="text/javascript">
+    var BaseUrl = "<?php echo Yii::$app->request->baseUrl;?>";
+</script>
 <body style="background: #eaeef3;">
 <?php $this->beginBody() ?>
 <div id="ui" class="ui ui-aside-none">
@@ -69,63 +71,17 @@ AppAsset::register($this);
                                     <li class="dropdown">
                                         <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                             <i class="fa fa-bell-o"></i>
-                                            <span class="badge">5</span>
+                                            <span class="badge noti-badge">0</span>
                                         </a>
                                         <!--dropdown -->
                                         <ul class="dropdown-menu dropdown-menu--responsive">
-                                            <div class="dropdown-header">Notifications (12)</div>
-                                            <ul class="Notification-list Notification-list--small niceScroll list-group" tabindex="0" style="overflow: hidden; outline: none;">
-                                                <li class="Notification list-group-item">
-                                                    <button class="Notification__status Notification__status--read" type="button" name="button"></button>
-                                                    <a href="">
-                                                        <div class="Notification__avatar Notification__avatar--danger pull-left" href="">
-                                                            <i class="Notification__avatar-icon fa fa-bolt"></i>
-                                                        </div>
-                                                        <div class="Notification__highlight">
-                                                            <p class="Notification__highlight-excerpt"><b>Server Error Report</b></p>
-                                                            <p class="Notification__highlight-time">1.2 hours ago</p>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="Notification list-group-item">
-                                                    <button class="Notification__status Notification__status--read" type="button" name="button"></button>
-                                                    <a href="">
-                                                        <div class="Notification__avatar Notification__avatar--success pull-left" href="">
-                                                            <i class="Notification__avatar-icon fa fa-user-plus"></i>
-                                                        </div>
-                                                        <div class="Notification__highlight">
-                                                            <p class="Notification__highlight-excerpt"><b>New Member Registration</b></p>
-                                                            <p class="Notification__highlight-time">2 hours ago</p>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="Notification list-group-item">
-                                                    <button class="Notification__status Notification__status--read" type="button" name="button"></button>
-                                                    <a href="">
-                                                        <div class="Notification__avatar pull-left" href="">
-                                                            <img src="imgs/a0.jpg" alt="...">
-                                                        </div>
-                                                        <div class="Notification__highlight">
-                                                            <p class="Notification__highlight-excerpt"><b>Tomas Edison</b> and 4 other people like your post “keep clam and watch the fizz”.</p>
-                                                            <p class="Notification__highlight-time">1 day ago</p>
-                                                        </div>
-                                                    </a>
-                                                </li>
-
-                                                <li class="Notification list-group-item">
-                                                    <button class="Notification__status Notification__status--unread" type="button" name="button"></button>
-                                                    <a href="">
-                                                        <div class="Notification__avatar pull-left" href="">
-                                                            <img src="imgs/a0.jpg" alt="...">
-                                                        </div>
-                                                        <div class="Notification__highlight">
-                                                            <p class="Notification__highlight-excerpt"><b>Luciad Extic</b> can join conference.</p>
-                                                            <p class="Notification__highlight-time">1 hour ago</p>
-                                                        </div>
-                                                    </a>
-                                                </li>
+                                            <div class="dropdown-header noti-count">Notifications (0)</div>
+                                            <ul class="Notification-list Notification-list--small niceScroll list-group noti-list" tabindex="0" style="overflow: hidden; outline: none;">
+                                               
                                             </ul>
-                                            <div class="dropdown-footer"><a href="">View more</a></div>
+                                            <div class="dropdown-footer">
+                                                <!-- <a href="">View more</a> -->
+                                            </div>
                                         <div id="ascrail2000" class="nicescroll-rails nicescroll-rails-vr" style="width: 12px; z-index: 10; cursor: default; position: absolute; top: 0px; left: 308px; height: 0px; display: none;"><div class="nicescroll-cursors" style="position: relative; top: 0px; float: right; width: 8px; height: 0px; background-color: rgb(0, 0, 0); border: 2px solid transparent; background-clip: padding-box; border-radius: 10px;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails nicescroll-rails-hr" style="height: 12px; z-index: 10; top: -12px; left: 0px; position: absolute; cursor: default; display: none;"><div class="nicescroll-cursors" style="position: absolute; top: 0px; height: 8px; width: 0px; background-color: rgb(0, 0, 0); border: 2px solid transparent; background-clip: padding-box; border-radius: 10px;"></div></div></ul>
                                         <!--/ dropdown -->
                                     </li>
