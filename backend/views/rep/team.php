@@ -34,7 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
 							<div class="margrita_bx">
 								<h3><?=$value->first_name ?> <?=$value->last_name ?></h3>
 								<div class="dv_rw">
-									<div class="img_team"><img src="team-img.jpg"></div>
+									<div class="img_team">
+										<?php
+										if(empty($value->image)){ ?>
+											<img width="107" src="uploads/1511248192_boy-512.png">
+										<?php } else{ ?>
+										<img width="107" src="<?=  str_replace("backend","frontend", Yii::$app->request->baseUrl).'/uploads/'.$value->image ?>">											
+									<?php }
+										?>
+									</div>
 									<div class="cont_team">
 										<h4><?=$value->address ?></h4>
 										<p><?=$value->city ?><br>

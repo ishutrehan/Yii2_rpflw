@@ -244,14 +244,11 @@ class RepController extends Controller
           if(isset($_FILES['file']) && !empty($_FILES['file']['name'])){
 
               $errors= array();
-              $file_name = $_FILES['file']['name'];
+              $file_name = date('U').'_'.$_FILES['file']['name'];
               $file_tmp =$_FILES['file']['tmp_name'];
-              $file_type=$_FILES['file']['type'];
-             
+              $file_type=$_FILES['file']['type'];             
               $tmp = explode('.', $file_name);
-              $file_extension = end($tmp);
-
-              
+              $file_extension = end($tmp);              
               move_uploaded_file($file_tmp,"uploads/".$file_name);
            }
 
@@ -378,10 +375,20 @@ class RepController extends Controller
         $connection = \Yii::$app->db;
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $model = $connection->createCommand('SELECT * FROM notifications WHERE isRead=0 AND type IN("sale_paid","sale_finalize_date") ORDER BY created_at DESC');
+        $model = $connection->createCommand('SELECT * FROM notifications WHERE type IN("sale_paid","sale_finalize_date") ORDER BY created_at DESC');
         $revenue = $model->queryAll();
         return $revenue;
+        // isRead=0 AND
 
     }
+
+    public function actionReadnotification() 
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $noti = Notifications::findOne($_POST['id']);
+        $noti->isRead = 1;
+        return array('status'=> $noti->save());
+    }
+
 
 }

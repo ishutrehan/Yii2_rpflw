@@ -365,9 +365,7 @@ $(function() {
 
 
 // check notifications
-
 setInterval(function(){
-    console.log("called...");
     $.ajax({
         url: BaseUrl+'/index.php?r=rep/notifications',
         type: 'GET',
@@ -378,7 +376,8 @@ setInterval(function(){
         var html = "";
         if(data.length) {
             for(var key in data) {
-                html += '<li class="Notification list-group-item"><button class="Notification__status Notification__status--read"name=button type=button></button> <a href=""><div class="Notification__avatar Notification__avatar--danger pull-left"href=""><i class="Notification__avatar-icon fa fa-bolt"></i></div><div class=Notification__highlight><p class=Notification__highlight-excerpt><b>#'+data[key].job_number+" - "+data[key].message+'</b><p class=Notification__highlight-time>'+data[key].created_at+'</div></a>';
+                var clas = (data[key].isRead == '1') ? 'Notification__status--read' : 'Notification__status--unread';
+                html += '<li class="Notification list-group-item"><button class="Notification__status '+clas+'"name=button type=button></button> <a href="javascript:void(0)" class="unread_noti" data-id="'+data[key].id+'"><div class="Notification__avatar Notification__avatar--danger pull-left"href=""><i class="Notification__avatar-icon fa fa-bolt"></i></div><div class=Notification__highlight><p class=Notification__highlight-excerpt><b>#'+data[key].job_number+" - "+data[key].message+'</b><p class=Notification__highlight-time>'+data[key].created_at+'</div></a>';
             }
         }
         $("div.noti-count").html("Notifications ("+data.length+")")
@@ -387,11 +386,25 @@ setInterval(function(){
     })
     .fail(function() {
         console.log("error");
-    })
-    .always(function() {
-        console.log("complete");
     });
     
 }, 5000)
+// 
+$(document).on('click', '.unread_noti', function(event) {
+    event.preventDefault();
+    var id = $(this).attr('data-id');
+    $.ajax({
+        url: BaseUrl+'/index.php?r=rep/readnotification',
+        type: 'POST',
+        dataType: 'json',
+        data: {id: id},
+    })
+    .done(function() {
+        console.log("success");
+    })
+    .fail(function() {
+        console.log("error");
+    });
+});
 
 })(jQuery);

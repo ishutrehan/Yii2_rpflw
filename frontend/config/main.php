@@ -49,7 +49,7 @@ return [
 
         'urlManagerFrontend' => [
             'class' => 'yii\web\urlManager',
-            'baseUrl' =>  'http://localhost/Yii2_rpflw/backend/web/index.php',
+            'baseUrl' =>  '/Yii2_rpflw/backend/web/index.php',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
         ],
