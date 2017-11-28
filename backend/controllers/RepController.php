@@ -338,10 +338,10 @@ class RepController extends Controller
             $user->role = 2;
             $user->save();
 
-            $$html = "<p>Url: <a href='http://itsmiths.co.in/repflow/frontend/web/index.php'>Login</a></p>";
-            $$html .= "<p>Email: ".$email."</p>";
-            $$html .= "<p>Password: ".$password."</p>";
-            $$html .= "";
+            $html = "<p>Url: <a href='http://itsmiths.co.in/repflow/frontend/web/index.php'>Login</a></p>";
+            $html .= "<p>Email: ".$email."</p>";
+            $html .= "<p>Password: ".$password."</p>";
+            $html .= "";
 
             Yii::$app->mailer->compose()
                 ->setTo($email)
@@ -442,10 +442,19 @@ class RepController extends Controller
         $connection = \Yii::$app->db;
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $model = $connection->createCommand('SELECT * FROM notifications WHERE isRead=0 AND type IN("new_sale","sale_updated","sale_completed","sale_finalize_date_user") ORDER BY created_at DESC');
+        $model = $connection->createCommand('SELECT * FROM notifications WHERE type IN("new_sale","sale_updated","sale_completed","sale_finalize_date_user") ORDER BY created_at DESC');
         $revenue = $model->queryAll();
         return $revenue;
+        // isRead=0 AND
 
+    }
+
+    public function actionReadnotification() 
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $noti = Notifications::findOne($_POST['id']);
+        $noti->isRead = 1;
+        return array('status'=> $noti->save());
     }
 
 }
