@@ -79,6 +79,9 @@ $this->params['breadcrumbs'][] = $this->title;
 											<th>
 												Action
 											</th>
+											<th>
+												
+											</th>
 											
 										</tr>
 									</thead>
@@ -128,8 +131,15 @@ $this->params['breadcrumbs'][] = $this->title;
 												echo $value['payment_status'];
 											echo"</td>";
 											echo'<td>';
-												echo Html::a('Edit', ['rep/update', "id"=>$value['id']], ['class' => 'download-lnk']);
-											echo"</td>";
+											echo Html::a('Edit', ['rep/update', "id"=>$value['id']], ['class' => 'btn btn-sm btn-primary']);
+											echo'</td>';
+											echo'<td>';
+												?>
+													
+											<a href="<?= Url::to(['rep/delete-sale', 'id' => $value->id]); ?>" onclick="return confirm('Are you sure you want to delete this Sale?')" class="btn btn-sm btn-primary">Delete</a>
+												
+										<?php	
+										echo"</td>";	
 										echo"</tr>";
 										}
 										?>
@@ -144,3 +154,4 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 </div>
+                                             	
