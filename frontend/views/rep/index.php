@@ -115,9 +115,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     echo Html::a('Download', ['rep/invoice', "id"=>$value['id']], ['class' => 'download-lnk']);
                                                 }
                                             echo"</td>";
+                                            if($value['payment_status'] == 'Unpaid'){
                                             echo'<td>';
                                                 echo Html::a('Edit', ['rep/update', "id"=>$value['id']], ['class' => 'download-lnk']);
                                             echo"</td>";
+                                        }else{
+                                             echo'<td>';
+                                            echo'-';
+                                            echo"</td>";   
+                                        }
                                         echo"</tr>";
                                         }
                                         ?>

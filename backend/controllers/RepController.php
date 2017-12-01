@@ -55,7 +55,7 @@ class RepController extends Controller
             return $this->goHome();
         }
         $model = Sales::find()
-                  ->all();
+                  ->all();       
         return $this->render('sales', [
           'model' => $model
         ]);
@@ -101,6 +101,7 @@ class RepController extends Controller
         }
         $model = User::find()
                   ->where(["role"=> 2 ])
+                  ->andWhere(['activate' => 0])
                   ->all();
 
         $user = new User();          
@@ -259,6 +260,14 @@ class RepController extends Controller
         }
     }
 
+    public function actionDeleteSale($id)
+    {
+       
+        $this->findModel($id)->delete();
+        Yii::$app->session->setFlash('Success',"Sale information has been Deleted");
+        return $this->redirect(['sales']);
+    }
+
     /**
      * Finds the Sales model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -285,7 +294,9 @@ class RepController extends Controller
 
     public function actionDelete($id)
     {
-        User::findOne($id)->delete();
+        $user = User::findOne($id);
+        $user->activate = 1;
+        $user->save(); 
         Yii::$app->session->setFlash('Success',"User has been deleted.");
         return $this->redirect(['team']);
     }
@@ -336,6 +347,7 @@ class RepController extends Controller
             $user->auth_key = Yii::$app->security->generateRandomString();
             $user->password_hash = $password_gen;
             $user->role = 2;
+            $user->activate = 0;
             $user->save();
 
             $html = "<p>Url: <a href='http://itsmiths.co.in/repflow/frontend/web/index.php'>Login</a></p>";

@@ -38,7 +38,7 @@ AppAsset::register($this);
                     <div class="navbar-header">
                         <!--logo start-->
                         <a href="" class="navbar-brand">
-                            <span class="logo"> <a href="<?=Url::toRoute('site/index') ?>"><img src="images/LogoHeader.png"/></a>
+                            <span class="logo"> <a href="<?=Url::toRoute('site/index') ?>"><img src="<?= Yii::getAlias('@web');?>/images/LogoHeader.png"/></a>
                                <!--  Repflow -->
                             </span>
                         </a>
@@ -90,9 +90,9 @@ AppAsset::register($this);
                                 <a href="#" class=" dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     <div class="user-avatar">
                                         <?php if(empty(Yii::$app->user->identity->image)) { ?>
-                                            <img src="images/BlankUser.png" alt="...">
+                                            <img src="<?= Yii::getAlias('@web');?>/images/BlankUser.png" alt="...">
                                         <?php } else { ?>
-                                            <img src="uploads/<?=Yii::$app->user->identity->image ?>" alt="...">
+                                            <img src="<?= Yii::getAlias('@web');?>/uploads/<?=Yii::$app->user->identity->image ?>" alt="...">
                                         <?php }  ?>                                
                                     </div>
                                     <span class="hidden-sm hidden-xs">

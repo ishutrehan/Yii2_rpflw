@@ -34,10 +34,10 @@ class Sales extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_date', 'firstname', 'lastname', 'jobnumber', 'products_sold', 'commission_amt', 'status', 'finalize_date', 'note'], 'required'],
+            [['order_date', 'firstname', 'lastname', 'jobnumber', 'products_sold', 'commission_amt', 'status', 'finalize_date'], 'required'],
             [['note'], 'string'],
-            [['order_date', 'firstname', 'lastname', 'products_sold', 'status'], 'string', 'max' => 255],
-            [['jobnumber', 'commission_amt','revenue'], 'integer'],
+            [['order_date', 'firstname', 'lastname', 'products_sold', 'status', 'commission_amt'], 'string', 'max' => 255],
+            [['jobnumber','revenue'], 'integer'],
             // [['finalize_date'], 'date'],
         ];
     }

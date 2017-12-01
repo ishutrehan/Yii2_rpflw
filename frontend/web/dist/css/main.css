@@ -4368,3 +4368,5 @@ label {
 .right_breadcrum {
     float: right;
 }
+
+.list-page{     width: 100%; float: left; }
